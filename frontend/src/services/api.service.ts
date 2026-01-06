@@ -1,4 +1,4 @@
-import axios, { AxiosRequestHeaders } from 'axios';
+import axios, { type RawAxiosRequestHeaders } from 'axios';
 import { parse } from 'cookie';
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
@@ -20,7 +20,7 @@ class ApiService {
     return this.getCsrfToken(false);
   }
 
-  static async getHeaders(extra: {[name: string]: string} = {}): Promise<AxiosRequestHeaders> {
+  static async getHeaders(extra: {[name: string]: string} = {}): Promise<RawAxiosRequestHeaders> {
     return Object.assign({
       'X-CSRFTOKEN': await this.getCsrfToken(),
     }, extra);

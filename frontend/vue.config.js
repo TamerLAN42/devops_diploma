@@ -1,8 +1,11 @@
-module.exports = {
+const { defineConfig } = require('@vue/cli-service')
+
+module.exports = defineConfig({
+  transpileDependencies: true,
   devServer: {
-    disableHostCheck: true
+    allowedHosts: 'all'
   },
   publicPath: process.env.NODE_ENV === 'production'
     ? '/momo-store/'
     : '/'
-};
+})
