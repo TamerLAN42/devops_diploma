@@ -2,8 +2,27 @@ variables:
   VERSION: 1.0.${CI_PIPELINE_ID}
 
 stages:
+  - test
   - build
   - release
+
+test:
+  stage: test
+  image:
+    name: golang:1.23-alpine3.22
+  cache:
+    key: go-mod-cache
+    paths:
+      - backend/go/pkg/mod
+      - backend/.cache/go-build
+  before_script:
+    - cd backend
+    - go env -w GOCACHE=${CI_PROJECT_DIR}/backend/.cache/go-build
+    - go env -w GOMODCACHE=${CI_PROJECT_DIR}/backend/go/pkg/mod
+    - go mod download
+  script:
+    - go vet ./cmd/... && go vet ./internal/...
+    - go test -v ./...
 
 build:
   stage: build
