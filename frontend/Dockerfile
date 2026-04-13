@@ -4,6 +4,6 @@ COPY . .
 RUN npm install && npm run build
 
 FROM nginx:1.29.8-alpine
-COPY --from=builder /build/dist/* /usr/share/nginx/html/
+COPY --from=builder /build/dist /usr/share/nginx/html
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
