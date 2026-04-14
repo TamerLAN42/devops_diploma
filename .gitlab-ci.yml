@@ -30,3 +30,13 @@ cluster:
   only:
     changes:
       - infra/cluster/**/*
+
+kuber:
+  stage: module-pipelines
+  trigger:
+    include:
+      - "/infra/kuber-test/.gitlab-ci.yml"
+    strategy: depend
+  only:
+    changes:
+      - infra/kuber-test/**/*

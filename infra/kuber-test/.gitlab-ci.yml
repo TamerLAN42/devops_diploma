@@ -1,0 +1,13 @@
+stages:
+  - test
+  
+create:
+  stage: test
+  image:
+    name: bitnami/kubectl
+  before_script:
+    - echo -n $KUBE_CONFIG_B64 | base64 -d > ~/.kube/config
+  script:
+    - kubectl config get-users
+    - kubectl config current-context
+    - kubectl get po
