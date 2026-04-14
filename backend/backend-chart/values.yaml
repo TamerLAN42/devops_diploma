@@ -1,0 +1,11 @@
+image: replaceme
+replicas: 1
+dockerConfig: replaceme
+environment: production
+resources:
+  requests:
+    cpu: "200m"
+    memory: "70Mi"
+  limits:
+    cpu: "400m"
+    memory: "300Mi"

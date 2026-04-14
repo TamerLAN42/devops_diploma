@@ -4,6 +4,7 @@ variables:
 stages:
   - build
   - release
+  - chart-upload
 
 build:
   stage: build
@@ -31,3 +32,15 @@ release:
     - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - crane tag $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA $VERSION
+
+chart-upload:
+  stage: chart-upload
+  image:
+    name: alpine/helm:3.20.2
+  before_script:
+    - apk add --no-cache curl gettext
+  script:
+    - envsubst < ${CI_PROJECT_DIR}/frontend/frontend-chart/Chart.yaml.template > ${CI_PROJECT_DIR}/frontend/frontend-chart/Chart.yaml && rm ${CI_PROJECT_DIR}/frontend/frontend-chart/Chart.yaml.template
+    - helm lint ${CI_PROJECT_DIR}/frontend/frontend-chart
+    - helm package ${CI_PROJECT_DIR}/frontend/frontend-chart
+    - curl -u $NEXUS_REPO_USER:$NEXUS_REPO_PASS -X POST "${NEXUS_REPO_URL}/repository/tamerlan-outlet-project/" -F "file=@frontend-${VERSION}.tgz"

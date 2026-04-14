@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-{{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ingressClassName: "nginx"
+  tls:
+    - hosts: # todo: Сделать нормальные сертификаты
+        - {{ .Values.host }}
+  rules:
+    - host: {{ .Values.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-{{ .Release.Name }}
+                port:
+                  number: 80
