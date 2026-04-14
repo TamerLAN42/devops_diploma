@@ -5,6 +5,7 @@ stages:
   - build
   - release
   - chart-upload
+  - chart-apply
 
 build:
   stage: build
@@ -43,4 +44,18 @@ chart-upload:
     - envsubst < ${CI_PROJECT_DIR}/frontend/frontend-chart/Chart.yaml.template > ${CI_PROJECT_DIR}/frontend/frontend-chart/Chart.yaml && rm ${CI_PROJECT_DIR}/frontend/frontend-chart/Chart.yaml.template
     - helm lint ${CI_PROJECT_DIR}/frontend/frontend-chart
     - helm package ${CI_PROJECT_DIR}/frontend/frontend-chart
-    - curl -u $NEXUS_REPO_USER:$NEXUS_REPO_PASS "${NEXUS_REPO_URL}/repository/tamerlan-outlet-project/" --upload-file frontend-${VERSION}.tgz
+    - curl -u $NEXUS_REPO_USER:$NEXUS_REPO_PASS "${NEXUS_REPO_URL}/repository/${NEXUS_REPO_NAME}/" --upload-file frontend-${VERSION}.tgz
+
+chart-apply:
+  stage: chart-apply
+  image:
+    name: alpine/helm:3.20.2
+  before_script:
+    - mkdir -p ~/.kube
+    - echo -n $KUBE_CONFIG_B64 | base64 -d > ~/.kube/config
+  script:
+    - helm repo add ${NEXUS_REPO_NAME} ${NEXUS_REPO_URL}/repository/${NEXUS_REPO_NAME}/ --username $NEXUS_REPO_USER --password $NEXUS_REPO_PASS
+    - helm repo update
+    - helm upgrade --install frontend ${NEXUS_REPO_NAME}/frontend
+  after_script:
+    - rm -f ~/.kube/config
