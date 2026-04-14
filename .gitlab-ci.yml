@@ -37,6 +37,4 @@ kuber:
     include:
       - "/infra/ingress/.gitlab-ci.yml"
     strategy: depend
-  only:
-    changes:
-      - infra/ingress/**/*
+  when: manual
