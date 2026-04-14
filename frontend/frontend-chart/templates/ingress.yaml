@@ -3,11 +3,14 @@ kind: Ingress
 metadata:
   name: frontend-{{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: "nginx"
   tls:
-    - hosts: # todo: Сделать нормальные сертификаты
+    - hosts:
         - {{ .Values.host }}
+      secretName: frontend-tls
   rules:
     - host: {{ .Values.host }}
       http:
