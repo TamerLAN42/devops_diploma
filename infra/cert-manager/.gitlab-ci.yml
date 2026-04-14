@@ -1,6 +1,6 @@
 stages:
   - install
-  
+  - ci-apply
 cert-manager-install:
   stage: install
   image:
@@ -11,5 +11,17 @@ cert-manager-install:
   script:
     - curl -LO https://cert-manager.io/public-keys/cert-manager-keyring-2021-09-20-1020CF3C033D4F35BAE1C19E1226061C665DF13E.gpg
     - helm upgrade --install cert-manager oci://quay.io/jetstack/charts/cert-manager --version v1.20.2 --namespace cert-manager --create-namespace --verify --keyring ./cert-manager-keyring-2021-09-20-1020CF3C033D4F35BAE1C19E1226061C665DF13E.gpg --set crds.enabled=true
+  after_script:
+    - rm -f ~/.kube/config
+
+cluster-issuer-apply:
+  stage: ci-apply
+  image:
+    name: bitnami/kubectl
+  before_script:
+    - mkdir -p ~/.kube
+    - echo -n $ADMIN_KUBECONFIG_B64 | base64 -d > ~/.kube/config
+  script:
+    - kubectl apply -f ${CI_PROJECT_DIR}/infra/cert-manager/cert.yaml
   after_script:
     - rm -f ~/.kube/config
