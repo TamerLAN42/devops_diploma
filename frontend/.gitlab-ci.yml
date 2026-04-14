@@ -43,4 +43,4 @@ chart-upload:
     - envsubst < ${CI_PROJECT_DIR}/frontend/frontend-chart/Chart.yaml.template > ${CI_PROJECT_DIR}/frontend/frontend-chart/Chart.yaml && rm ${CI_PROJECT_DIR}/frontend/frontend-chart/Chart.yaml.template
     - helm lint ${CI_PROJECT_DIR}/frontend/frontend-chart
     - helm package ${CI_PROJECT_DIR}/frontend/frontend-chart
-    - curl -u $NEXUS_REPO_USER:$NEXUS_REPO_PASS -X POST "${NEXUS_REPO_URL}/repository/tamerlan-outlet-project/" -F "file=@frontend-${VERSION}.tgz"
+    - curl -u $NEXUS_REPO_USER:$NEXUS_REPO_PASS "${NEXUS_REPO_URL}/repository/tamerlan-outlet-project/" --upload-file frontend-${VERSION}.tgz
