@@ -56,6 +56,6 @@ chart-apply:
   script:
     - helm repo add ${NEXUS_REPO_NAME} ${NEXUS_REPO_URL}/repository/${NEXUS_REPO_NAME}/ --username $NEXUS_REPO_USER --password $NEXUS_REPO_PASS
     - helm repo update
-    - helm upgrade --install frontend ${NEXUS_REPO_NAME}/frontend
+    - helm upgrade --install frontend ${NEXUS_REPO_NAME}/frontend --set dockerConfig=$DOCKER_CONFIG_B64 --set image=$CI_REGISTRY_IMAGE/momo-frontend:$VERSION --set host=$INGRESS_HOST --atomic --timeout 15m
   after_script:
     - rm -f ~/.kube/config

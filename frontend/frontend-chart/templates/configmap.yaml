@@ -23,14 +23,14 @@ data:
             }
 
             location /auth {
-                proxy_pass http://backend-{{ .Release.Name }}:8081;
+                proxy_pass http://backend:8081;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
             }
 
             location ~ ^/momo-store/(products|categories) {
                 rewrite ^/momo-store/(.*) /$1 break;
-                proxy_pass http://backend-{{ .Release.Name }}:8081;
+                proxy_pass http://backend:8081;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
             }

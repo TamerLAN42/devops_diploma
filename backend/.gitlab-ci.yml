@@ -75,6 +75,6 @@ chart-apply:
   script:
     - helm repo add ${NEXUS_REPO_NAME} ${NEXUS_REPO_URL}/repository/${NEXUS_REPO_NAME}/ --username $NEXUS_REPO_USER --password $NEXUS_REPO_PASS
     - helm repo update
-    - helm upgrade --install backend ${NEXUS_REPO_NAME}/backend
+    - helm upgrade --install backend ${NEXUS_REPO_NAME}/backend --set dockerConfig=$DOCKER_CONFIG_B64 --set image=$CI_REGISTRY_IMAGE/momo-backend:$VERSION --atomic --timeout 15m
   after_script:
     - rm -f ~/.kube/config
