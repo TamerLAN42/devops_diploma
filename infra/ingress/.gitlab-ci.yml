@@ -1,0 +1,14 @@
+stages:
+  - install
+  
+ingress-install:
+  stage: install
+  image:
+    name: alpine/helm:3.20.2
+  before_script:
+    - mkdir -p ~/.kube
+    - echo -n $ADMIN_KUBECONFIG_B64 | base64 -d > ~/.kube/config
+  script:
+    - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+    - helm repo update
+    - helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx
