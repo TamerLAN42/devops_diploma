@@ -31,10 +31,28 @@ cluster:
     changes:
       - infra/cluster/**/*
 
-kuber:
+ingress:
   stage: module-pipelines
   trigger:
     include:
       - "/infra/ingress/.gitlab-ci.yml"
     strategy: depend
   when: manual
+
+cert:
+  stage: module-pipelines
+  trigger:
+    include:
+      - "/infra/cert-manager/.gitlab-ci.yml"
+    strategy: depend
+  when: manual
+
+token:
+  stage: module-pipelines
+  trigger:
+    include:
+      - "/infra/token/.gitlab-ci.yml"
+    strategy: depend
+  only:
+    changes:
+      - infra/token/**/*

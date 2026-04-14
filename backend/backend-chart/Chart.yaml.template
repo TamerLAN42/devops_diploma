@@ -1,0 +1,4 @@
+apiVersion: v2
+name: backend
+version: ${VERSION}
+appVersion: 0.1.0

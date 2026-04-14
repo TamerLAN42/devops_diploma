@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-configmap-{{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+data:
+  nginx.conf: |
+    server {
+        listen       80;
+        listen  [::]:80;
+        server_name _;
+
+
+            location / {
+                root   /usr/share/nginx/html;
+                index  index.html index.htm;
+                try_files $uri $uri/ /index.html;
+            }
+        
+            location /health {
+                default_type text/plain;
+                return 200 "Everything looks fine to me";
+            }
+
+            location /auth {
+                proxy_pass http://backend:8081;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+            }
+
+            location ~ ^/momo-store/(products|categories) {
+                rewrite ^/momo-store/(.*) /$1 break;
+                proxy_pass http://backend:8081;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+            }
+
+            error_page   500 502 503 504  /50x.html;
+            location = /50x.html {
+                root   /usr/share/nginx/html;
+            }
+
+
+        }

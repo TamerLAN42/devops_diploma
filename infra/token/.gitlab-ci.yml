@@ -1,0 +1,14 @@
+stages:
+  - create-token
+  
+create-token:
+  stage: create-token
+  image:
+    name: bitnami/kubectl
+  before_script:
+    - mkdir -p ~/.kube
+    - echo -n $ADMIN_KUBECONFIG_B64 | base64 -d > ~/.kube/config
+  script:
+    - kubectl apply -f ${CI_PROJECT_DIR}/infra/token/token.yaml
+  after_script:
+    - rm -f ~/.kube/config

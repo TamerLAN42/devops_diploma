@@ -1,0 +1,4 @@
+apiVersion: v2
+name: frontend
+version: ${VERSION}
+appVersion: 0.1.0
