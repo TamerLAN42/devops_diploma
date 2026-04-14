@@ -20,3 +20,13 @@ backend:
   only:
     changes:
       - backend/**/*
+
+cluster:
+  stage: module-pipelines
+  trigger:
+    include:
+      - "/infra/cluster/.gitlab-ci.yml"
+    strategy: depend
+  only:
+    changes:
+      - infra/cluster/**/*

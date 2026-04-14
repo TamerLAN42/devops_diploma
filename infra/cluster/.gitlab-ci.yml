@@ -1,0 +1,37 @@
+stages:
+  - create
+  - destroy
+  
+create:
+  stage: create
+  image:
+    name: hashicorp/terraform:1.14.8
+  before_script:
+    - echo -n "${TF_KEY_B64}" | base64 -d > /key.json
+    - export YC_SERVICE_ACCOUNT_KEY_FILE=/key.json
+    - echo -n "${TERRAFORMRC_B64}" | base64 -d > ~/.terraformrc
+  script:
+    - cd infra/cluster
+    - terraform init
+    - terraform plan
+    - terraform apply -auto-approve
+  after_script:
+    - rm -f /key.json
+    
+destroy:
+  stage: destroy
+  when: manual
+  needs: ["create"]
+  dependencies: []
+  image:
+    name: hashicorp/terraform:1.14.8
+  before_script:
+    - echo -n "${TF_KEY_B64}" | base64 -d > /key.json
+    - export YC_SERVICE_ACCOUNT_KEY_FILE=/key.json
+    - echo -n "${TERRAFORMRC_B64}" | base64 -d > ~/.terraformrc
+  script:
+    - cd infra/cluster
+    - terraform init
+    - terraform destroy -auto-approve
+  after_script:
+    - rm -f /key.json
