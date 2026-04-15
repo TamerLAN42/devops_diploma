@@ -1,0 +1,16 @@
+stages:
+  - install
+
+install-prometheus:
+  stage: install
+  image:
+    name: alpine/helm:3.20.2
+  before_script:
+    - mkdir -p ~/.kube
+    - echo -n $ADMIN_KUBECONFIG_B64 | base64 -d > ~/.kube/config
+  script:
+    - helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    - helm repo update
+    - helm upgrade --install kube-prometheus prometheus-community/kube-prometheus-stack --atomic --timeout 15m --set grafana.enabled=false --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false -n momo-app
+  after_script:
+    - rm -f ~/.kube/config
