@@ -47,6 +47,16 @@ cert:
     strategy: depend
   when: manual
 
+monitoring:
+  stage: module-pipelines
+  trigger:
+    include:
+      - "/infra/monitoring/grafana/.gitlab-ci.yml"
+      - "/infra/monitoring/loki-stack/.gitlab-ci.yml"
+      - "/infra/monitoring/kube-prometheus-stack/.gitlab-ci.yml"
+    strategy: depend
+  when: manual
+
 token:
   stage: module-pipelines
   trigger:

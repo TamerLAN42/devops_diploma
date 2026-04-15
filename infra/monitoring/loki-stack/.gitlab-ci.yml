@@ -1,0 +1,16 @@
+stages:
+  - install
+
+install-loki:
+  stage: install
+  image:
+    name: alpine/helm:3.20.2
+  before_script:
+    - mkdir -p ~/.kube
+    - echo -n $ADMIN_KUBECONFIG_B64 | base64 -d > ~/.kube/config
+  script:
+    - helm repo add grafana https://grafana.github.io/helm-charts
+    - helm repo update
+    - helm upgrade --install loki grafana/loki-stack --atomic --timeout 15m --set grafana.enabled=false --set promtail.enabled=true -n momo-app
+  after_script:
+    - rm -f ~/.kube/config
