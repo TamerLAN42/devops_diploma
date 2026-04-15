@@ -47,6 +47,14 @@ cert:
     strategy: depend
   when: manual
 
+grafana:
+  stage: module-pipelines
+  trigger:
+    include:
+      - "/infra/grafana/.gitlab-ci.yml"
+    strategy: depend
+  when: manual
+
 token:
   stage: module-pipelines
   trigger:
