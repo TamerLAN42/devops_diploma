@@ -35,6 +35,13 @@ data:
                 proxy_set_header X-Real-IP $remote_addr;
             }
 
+            location /grafana-vxbor4/ {
+                rewrite ^/grafana-vxbor4/(.*) /$1 break;
+                proxy_pass http://grafana:3000;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+            }
+            
             error_page   500 502 503 504  /50x.html;
             location = /50x.html {
                 root   /usr/share/nginx/html;
