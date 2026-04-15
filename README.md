@@ -1,6 +1,6 @@
 # Momo Store aka Пельменная №2
 
-<img width="900" alt="image" src="https://user-images.githubusercontent.com/9394918/167876466-2c530828-d658-4efe-9064-825626cc6db5.png">
+<img width="900" alt="image" src="./assets/app_view.png">
 
 ## Frontend
 
@@ -58,6 +58,17 @@ kubectl create token admin-user -n kube-system
 
 Модульный пайплайн `ingress` подключит репозиторий ingress-nginx и установит helm-чарт в кластер.  
 А пайплайн `cert` установит чарт cert-manager и создаст ресурс cluster issuer для обработки запросов на создание сертификатов.
+
+### Установка мониторинга
+
+Для этого есть модульный пайплайн monitoring. Он установит чарты loki-stack и prom-kube-stack, а также локальный чарт grafana.  
+
+Для экономии средств (а ещё чтобы не выкладывать свой паспорт в интернет при покупке нормального домена) - мониторинг для доступа использует основной фронтэнд приложения.  
+Графана будет доступна на `https://${INGRESS_HOST}/grafana-vxbor4`. Почему не просто `/grafana`? Чтобы пользователям (и сканерам) было чуть сложнее случайно зайти в панель мониторинга.  
+
+Остаётся только подключить источники данных - `loki:3100` и `http://kube-prometheus-kube-prome-prometheus:9090`, и сконфигурировать дашборды. Пример см. ниже
+
+<img width="900" alt="image" src="./assets/dashboard_view.png">
 
 ## Как понять что всё окей? aka диагностика проблем
 
