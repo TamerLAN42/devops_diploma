@@ -47,11 +47,12 @@ cert:
     strategy: depend
   when: manual
 
-grafana:
+monitoring:
   stage: module-pipelines
   trigger:
     include:
-      - "/infra/grafana/.gitlab-ci.yml"
+      - "/infra/monitoring/grafana/.gitlab-ci.yml"
+      - "/infra/monitoring/loki-stack/.gitlab-ci.yml"
     strategy: depend
   when: manual
 

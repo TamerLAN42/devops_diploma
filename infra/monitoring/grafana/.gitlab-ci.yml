@@ -9,6 +9,6 @@ install-grafana:
     - mkdir -p ~/.kube
     - echo -n $KUBE_CONFIG_B64 | base64 -d > ~/.kube/config
   script:
-    - helm upgrade --install grafana ./infra/grafana/grafana-chart --atomic --timeout 15m
+    - helm upgrade --install grafana ./infra/monitoring/grafana/grafana-chart --atomic --timeout 15m
   after_script:
     - rm -f ~/.kube/config
