@@ -1,0 +1,5 @@
+backend/cmd/** linguist-detectable=false
+backend/internal/** linguist-detectable=false
+
+frontend/public/** linguist-detectable=false
+frontend/src/** linguist-detectable=false
